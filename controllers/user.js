@@ -2,7 +2,7 @@ const User = require('../models/users')
 
 exports.signup=async(req,res)=>{
     console.log(req.body)
-
+try{
     const {name,email,password} = req.body;
     console.log(name)
     if(name==undefined||name.length===0||password==undefined||password.length===0||email==undefined||email.length===0){
@@ -17,8 +17,8 @@ exports.signup=async(req,res)=>{
         res.status(201).json({message:'successfully created new user'})
     })
     
-    .catch(err=>{
-        res.status(500).json(err)
-        console.log(err)
-    })
+}
+catch (err) {
+    res.status(500).json(err);
+}
 }
