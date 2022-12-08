@@ -16,6 +16,7 @@ async function savetocloud(event){
     if(Response.status===201){
       console.log(Response)
       alert('login sucessfull')
+      window.location.href='./expense.html'
     }
 
     if(Response.status===401){

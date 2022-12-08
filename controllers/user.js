@@ -1,4 +1,5 @@
 const User = require('../models/users')
+const Expense = require('../models/expense')
 const bcrypt = require('bcrypt')
 
 exports.signup=async(req,res)=>{
