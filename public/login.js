@@ -1,20 +1,20 @@
 async function savetocloud(event){
     event.preventDefault();
-    const signupDetails={
+    const signinDetails={
   email: event.target.email.value,
   password: event.target.password.value
   
     }
-    console.log(signupDetails)
+    console.log(signinDetails)
   
   
   
-  let serilized_Obj = JSON.stringify(signupDetails);
+  let serilized_Obj = JSON.stringify(signinDetails);
   
-  const response= await axios.post("http://localhost:3000/user/login",signupDetails)
+  const response= await axios.post("http://localhost:3000/user/login",signinDetails)
   .then((Response)=>{
-    console.log(response)
-    if(Response===201){
+    console.log(Response)
+    if(response.status===201){
       console.log(Response)
       alert('login sucessfull')
     }
