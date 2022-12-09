@@ -1,6 +1,7 @@
 const User = require('../models/users')
 const Expense = require('../models/expense')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 exports.signup=async(req,res)=>{
     console.log(req.body)
@@ -28,7 +29,12 @@ catch (err) {
 }
 }
 
+function generateAccessToken(id,name){
+    return jwt.sign({userId:id,name:name},'secretkey')
+}
+
 exports.signin= async(req,res)=>{
+    try{
     console.log(req.body)
     const {email,password}=req.body;
     if(password==undefined||password.length===0||email==undefined||email.length===0){
@@ -40,7 +46,7 @@ if(err){
     return res.status(500).json({message:'something went wrong'})
 }
 if(data===true){
-    return res.status(201).json({message:'login success'})
+    return res.status(201).json({message:'login success',token:generateAccessToken(userMail[0].id,userMail[0].name)})
     
 
 }
@@ -48,5 +54,9 @@ else{
     return res.status(400).json({message:'Password is Incorrect'})
 }
 })
+    }
+    catch(err){
+        return res.status(500).json({message:'something went wrong'})
+    }
 
 }

@@ -50,8 +50,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js"></script>
   <script>
 window.addEventListener("DOMContentLoaded",()=>{
-
-  axios.get('http://localhost:3000/expenses')
+  const token = localStorage.getItem('token')
+  axios.get('http://localhost:3000/expenses',{headers:{"Authorization":token}})
   .then((Response)=>{
     console.log(Response)
 
@@ -76,6 +76,7 @@ category: event.target.category.value
 
 
 let serilized_Obj = JSON.stringify(myobj);
+console.log(myobj)
 
 axios.post("http://localhost:3000/addexpense",myobj)
 .then((Response)=>{

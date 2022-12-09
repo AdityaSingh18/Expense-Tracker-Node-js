@@ -16,6 +16,7 @@ async function savetocloud(event){
     if(Response.status===201){
       console.log(Response)
       alert('login sucessfull')
+      localStorage.setItem('token',Response.data.token)
       window.location.href='./expense.html'
     }
 
@@ -35,7 +36,7 @@ async function savetocloud(event){
   })
   
   .catch((err)=>{
-      document.body.innerHTML+=`div style="color:red;">${err}<div>`
+      document.body.innerHTML+=`<div style="color:red;">${err}<div>`
   })
   
   }
