@@ -7,6 +7,7 @@ exports.authentication = (req,res,next)=>{
     console.log(user.userId)
     User.findByPk(user.userId).then(foundUser=>{
         req.user = foundUser ;
+        console.log(foundUser+"this is founduser")
         next();
     })
     

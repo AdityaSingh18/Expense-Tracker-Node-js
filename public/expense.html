@@ -69,16 +69,16 @@ function savetocloud(event){
   myobj={
 amount :event.target.amount.value,
 descip: event.target.descip.value,
-category: event.target.category.value
-
+category: event.target.category.value,
+id:localStorage.getItem('token')
   }
-
+  const token = localStorage.getItem('token')
 
 
 let serilized_Obj = JSON.stringify(myobj);
 console.log(myobj)
 
-axios.post("http://localhost:3000/addexpense",myobj)
+axios.post("http://localhost:3000/addexpense",myobj,{headers:{"Authorization":token}})
 .then((Response)=>{
 console.log(Response)
 document.getElementById('amount').value="";
@@ -107,7 +107,8 @@ parentNode.innerHTML= parentNode.innerHTML+childHTML;
   }
 
   function deleteUser(userId){
-    axios.delete(`http://localhost:3000/delete/${userId}`)
+    const token = localStorage.getItem('token')
+    axios.delete(`http://localhost:3000/delete/${userId}`,{headers:{"Authorization":token}})
     .then(()=>{
         removeExpenseFromScreen(userId)
     })
