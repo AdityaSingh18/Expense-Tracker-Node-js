@@ -38,8 +38,11 @@
       <input type="submit" class="btn btn-dark" value="Submit">
      
     </form>
+    <button id="rzp-button1">Buy Premium</button>
+
     <ul id="expenses">
       <h5 id="belowexpenses" class="title">Expenses</h2>
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     </ul>
   
     
@@ -48,83 +51,7 @@
   </div>
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js"></script>
-  <script>
-window.addEventListener("DOMContentLoaded",()=>{
-  const token = localStorage.getItem('token')
-  axios.get('http://localhost:3000/expenses',{headers:{"Authorization":token}})
-  .then((Response)=>{
-    console.log(Response)
-
-    for(var i=0;i<Response.data.length;i++){
-        ShowExpenses(Response.data[i])
-        console.log(Response.data[i])
-    }
-  })
-
-    
-})
-
-function savetocloud(event){
-  event.preventDefault();
-  myobj={
-amount :event.target.amount.value,
-descip: event.target.descip.value,
-category: event.target.category.value,
-id:localStorage.getItem('token')
-  }
-  const token = localStorage.getItem('token')
-
-
-let serilized_Obj = JSON.stringify(myobj);
-console.log(myobj)
-
-axios.post("http://localhost:3000/addexpense",myobj,{headers:{"Authorization":token}})
-.then((Response)=>{
-console.log(Response)
-document.getElementById('amount').value="";
-  document.getElementById('descip').value="";
-  document.getElementById('category').value="";
-
-})
-.catch((err)=>{
-    console.log(err)
-})
-
-ShowExpenses(myobj)
-}
-
-
-
-function ShowExpenses(user){
- let parentNode = document.getElementById('belowexpenses');
- let childHTML = `<li id=${user.id}> ${user.amount}-${user.descip}-${user.category}
-  <button onclick=deleteUser('${user.id}')> Delete </button>
-</li>`
-;
-
-
-parentNode.innerHTML= parentNode.innerHTML+childHTML;
-  }
-
-  function deleteUser(userId){
-    const token = localStorage.getItem('token')
-    axios.delete(`http://localhost:3000/delete/${userId}`,{headers:{"Authorization":token}})
-    .then(()=>{
-        removeExpenseFromScreen(userId)
-    })
-    .catch((err)=>{
-        console.log(err);
-    })
-removeExpenseFromScreen(userId)
-  }
-
-  function removeExpenseFromScreen(userId){
-    let parentNode = document.getElementById('belowexpenses');
-    let childNodeTobeDeleted = document.getElementById(userId);
-    console.log(childNodeTobeDeleted);
-   parentNode.removeChild(childNodeTobeDeleted);
-  }
-
+  <script src="./expense.js">
   </script>
 </body>
 </html>
