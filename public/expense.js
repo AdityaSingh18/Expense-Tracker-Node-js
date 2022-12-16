@@ -1,5 +1,10 @@
 window.addEventListener("DOMContentLoaded",()=>{
     const token = localStorage.getItem('token')
+    const decodeToken= parseJwt(token)
+    const ispremiumuser = decodeToken.ispremiumuser
+    if(ispremiumuser){
+      showPremiumuserMessage()
+    }
     axios.get('http://localhost:3000/expenses',{headers:{"Authorization":token}})
     .then((Response)=>{
       console.log(Response)
@@ -86,6 +91,20 @@ window.addEventListener("DOMContentLoaded",()=>{
             console.log(error)
         }
     }
+    function parseJwt (token) {
+      var base64Url = token.split('.')[1];
+      var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+  
+      return JSON.parse(jsonPayload);
+  }
+
+  function showPremiumuserMessage(){
+    document.getElementById('rzp-button1').style.visibility ='hidden'
+                    document.getElementById('message').innerHTML='You are premium User'
+  }
 
     function checkout(order){
         const token = localStorage.getItem('token')
@@ -111,8 +130,7 @@ window.addEventListener("DOMContentLoaded",()=>{
                     console.log("done");
                     console.log(res);
                     alert("You are a premium user now");
-                    document.getElementById('rzp-button1').style.visibility ='hidden'
-                    document.getElementById('message').innerHTML='You are premium User'
+                    showPremiumuserMessage()
                     localStorage.setItem('user' , "true")
                     premiumUser();
                     getPremiumLeaderboard()

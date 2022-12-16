@@ -29,8 +29,8 @@ catch (err) {
 }
 }
 
-function generateAccessToken(id,name){
-    return jwt.sign({userId:id,name:name},'secretkey')
+function generateAccessToken(id,name,ispremiumuser){
+    return jwt.sign({userId:id,name:name,ispremiumuser},'secretkey')
 }
 
 exports.signin= async(req,res)=>{
@@ -46,7 +46,7 @@ if(err){
     return res.status(500).json({message:'something went wrong'})
 }
 if(data===true){
-    return res.status(201).json({message:'login success',token:generateAccessToken(userMail[0].id,userMail[0].name)})
+    return res.status(201).json({message:'login success',token:generateAccessToken(userMail[0].id,userMail[0].name,userMail[0].ispremiumuser)})
     
 
 }
