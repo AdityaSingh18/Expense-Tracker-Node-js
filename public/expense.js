@@ -88,7 +88,7 @@ window.addEventListener("DOMContentLoaded",()=>{
     }
 
     function checkout(order){
-
+        const token = localStorage.getItem('token')
         // console.log(order);
         // console.log(order.order.id)
     
@@ -111,6 +111,8 @@ window.addEventListener("DOMContentLoaded",()=>{
                     console.log("done");
                     console.log(res);
                     alert("You are a premium user now");
+                    document.getElementById('rzp-button1').style.visibility ='hidden'
+                    document.getElementById('message').innerHTML='You are premium User'
                     localStorage.setItem('user' , "true")
                     premiumUser();
                     getPremiumLeaderboard()
