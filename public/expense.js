@@ -4,6 +4,7 @@ window.addEventListener("DOMContentLoaded",()=>{
     const ispremiumuser = decodeToken.ispremiumuser
     if(ispremiumuser){
       showPremiumuserMessage()
+      showLeaderBoard()
     }
     axios.get('http://localhost:3000/expenses',{headers:{"Authorization":token}})
     .then((Response)=>{
@@ -100,6 +101,22 @@ window.addEventListener("DOMContentLoaded",()=>{
   
       return JSON.parse(jsonPayload);
   }
+  function showLeaderBoard(){
+    const inputElement = document.createElement('input')
+    inputElement.type='button'
+    inputElement.value='show LeaderBoard'
+    inputElement.onclick= async()=>{
+      const token = localStorage.getItem('token')
+      const userLeaderBoardArray = await axios.get('http://localhost:3000/premium/showLeaderBoard',{headers : {'Authorization': token}})
+
+      var LeaderBoardElem = document.getElementById('leaderboard')
+      LeaderBoardElem.innerHTML+='<h1>Leader Board</h1>'
+      userLeaderBoardArray.data.forEach((userDetails)=>{
+        LeaderBoardElem.innerHTML+=`<li>Name- ${userDetails.name} Total Expense - ${userDetails.total_cost}`
+      })
+    }
+    document.getElementById('message').appendChild(inputElement)
+  }
 
   function showPremiumuserMessage(){
     document.getElementById('rzp-button1').style.visibility ='hidden'
@@ -132,7 +149,9 @@ window.addEventListener("DOMContentLoaded",()=>{
                     alert("You are a premium user now");
                     showPremiumuserMessage()
                     localStorage.setItem('user' , "true")
+                    //localStorage.setItem('token',res.data.token)
                     premiumUser();
+                    showLeaderBoard()
                     getPremiumLeaderboard()
                 })
                 .catch(err => console.log(err));
