@@ -13,6 +13,8 @@ const Expense = require('./models/expense');
 const Order = require('./models/order');
 const purchaseRouter = require('./Routes/purchase')
 const premiumFeatureRouter = require('./Routes/premiumFeature')
+const Forgotpassword = require('./models/forgotpassword')
+const forgotpassRouter = require('./Routes/forgetpass')
 app.use(express.json())
 app.use(cors())
 app.use(bodyParser.json({extended:false}))
@@ -23,6 +25,7 @@ app.use('/user',userRoutes)
 app.use(expenseRouter)
 app.use('/payment' , purchaseRouter)
 app.use('/premium',premiumFeatureRouter)
+app.use('/password',forgotpassRouter)
 
 Expense.belongsTo(User);
 User.hasMany(Expense)
