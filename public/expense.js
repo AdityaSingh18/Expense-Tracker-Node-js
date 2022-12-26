@@ -177,3 +177,22 @@ window.addEventListener("DOMContentLoaded",()=>{
     
         razorpay_1.open();
     }
+
+    function download(){
+      const token = localStorage.getItem('token')
+      axios.get('http://localhost:3000/download',{headers : {'Authorization': token}})
+      .then((response)=>{
+        if(response.status===200){
+          var a = document.createElement("a");
+          a.href= response.data.fileURL
+          a.download= 'myexpense.csv';
+          a.click();
+        }
+        else{
+          throw new Error(response.data.message)
+        }
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
+    }
