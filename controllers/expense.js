@@ -22,10 +22,32 @@ exports.addExpense= async(req,res,next)=>{
 }
 
 exports.getExpenses =async (req,res,next)=>{
-    console.log(req.body[0])
-    const data= await Expense.findAll({where:{userID:req.user.id}})
-    console.log(data+"this is data")
-    res.status(201).json(data)
+    let page = req.params.pageno || 1
+    
+    let limit_items = +(req.body.itemsPerPage) || 5 ;
+
+    console.log(+(req.body.itemsPerPage))
+
+    let totalItems 
+
+    try {
+
+        let count = await Expense.count({where:{userId:req.user.id}})
+        totalItems = count ; 
+
+        let data = await req.user.getExpenses({offset:(page-1)*limit_items , limit:limit_items})
+        res.status(200).json({data ,
+            info: {
+              currentPage: page,
+              hasNextPage: totalItems > page * limit_items,
+              hasPreviousPage: page > 1,
+              nextPage: +page + 1,
+              previousPage: +page - 1,
+              lastPage: Math.ceil(totalItems / limit_items),
+            }})
+    } catch (error) {
+        res.status(500).json({message:'unable to get expwnse'})
+    }
 }
 
 exports.deleteExpense =async(req,res,next)=>{
@@ -40,16 +62,6 @@ exports.deleteExpense =async(req,res,next)=>{
     res.status(200)
 }
 
-
-exports.downloadExpense= exports.downloadExpense = async(req,res,next)=>{
-    try {
-      
-        const expenses = await req.user.getExpenses()
-
-    } catch (err) {
-        res.status(500).json({fileURL: "", success: false, err: err});
-    }
-}
 
 exports.downloadExpense = async(req,res,next)=>{
     try {

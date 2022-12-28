@@ -1,3 +1,7 @@
+const pagination = document.getElementById('pagination');
+const perpage = document.getElementById('perpage');
+let itemsPerPage = Number(localStorage.getItem('itemsperpage')) ;
+
 window.addEventListener("DOMContentLoaded",()=>{
     const token = localStorage.getItem('token')
     const decodeToken= parseJwt(token)
@@ -5,7 +9,20 @@ window.addEventListener("DOMContentLoaded",()=>{
     if(ispremiumuser){
       showPremiumuserMessage()
       showLeaderBoard()
+      const val =document.getElementById('perpagebutton')
+      console.log(localStorage.getItem('itemsperpage'))
+      val.value = localStorage.getItem('itemsperpage')
+      
+
+      console.log(val.value)
     }
+    let page = 1  ;
+   
+    getLoadExpenses(page , itemsPerPage) ;
+
+
+
+    /*
     axios.get('http://localhost:3000/expenses',{headers:{"Authorization":token}})
     .then((Response)=>{
       console.log(Response)
@@ -15,6 +32,8 @@ window.addEventListener("DOMContentLoaded",()=>{
           console.log(Response.data[i])
       }
     })
+
+    */
   
       
   })
@@ -33,7 +52,7 @@ window.addEventListener("DOMContentLoaded",()=>{
   let serilized_Obj = JSON.stringify(myobj);
   console.log(myobj)
   
-  axios.post("http://localhost:3000/addexpense",myobj,{headers:{"Authorization":token}})
+  axios.post("http://localhost:3000/expenses/addexpense",myobj,{headers:{"Authorization":token}})
   .then((Response)=>{
   console.log(Response)
   document.getElementById('amount').value="";
@@ -51,6 +70,7 @@ window.addEventListener("DOMContentLoaded",()=>{
   
   
   function ShowExpenses(user){
+    console.log(user)
    let parentNode = document.getElementById('belowexpenses');
    let childHTML = `<li id=${user.id}> ${user.amount}-${user.descip}-${user.category}
     <button onclick=deleteUser('${user.id}')> Delete </button>
@@ -180,7 +200,7 @@ window.addEventListener("DOMContentLoaded",()=>{
 
     function download(){
       const token = localStorage.getItem('token')
-      axios.get('http://localhost:3000/download',{headers : {'Authorization': token}})
+      axios.get('http://localhost:3000/expenses/download',{headers : {'Authorization': token}})
       .then((response)=>{
         if(response.status===200){
           var a = document.createElement("a");
@@ -196,3 +216,66 @@ window.addEventListener("DOMContentLoaded",()=>{
         console.log(err)
       })
     }
+
+    
+
+    async function getLoadExpenses(page , itemsPerPage){
+      const token = localStorage.getItem('token')
+      try {
+          let response = await axios.post(`http://localhost:3000/expenses/${page}` ,{itemsPerPage:itemsPerPage}  , {headers:{"Authorization" : token}})
+          // console.log(response.data.info)
+          let parentNode = document.getElementById('belowexpenses');
+          parentNode.innerHTML=''
+          for(var i=0;i<response.data.data.length;i++){
+            
+            console.log(response.data.data[0])
+            ShowExpenses(response.data.data[i])
+            showPagination(response.data.info)
+          }
+
+    
+      } catch (error) {
+          console.log(error);
+      }
+  }
+
+
+    function showPagination({currentPage,hasNextPage,hasPreviousPage,nextPage,previousPage,lastPage}){
+    
+      pagination.innerHTML ='';
+      
+      if(hasPreviousPage){
+          const button1 = document.createElement('button');
+          button1.innerHTML = previousPage ;
+          button1.addEventListener('click' , ()=>getLoadExpenses(previousPage , itemsPerPage))
+          pagination.appendChild(button1)
+      }
+      
+      const button2 = document.createElement('button');
+      button2.classList.add('active')
+      button2.innerHTML = currentPage ;
+      button2.addEventListener('click' , ()=>getLoadExpenses(currentPage , itemsPerPage))
+      pagination.appendChild(button2)
+  
+      if(hasNextPage){
+          const button3 = document.createElement('button');
+          button3.innerHTML = nextPage ;
+          button3.addEventListener('click' , ()=>getLoadExpenses(nextPage , itemsPerPage))
+          pagination.appendChild(button3)
+      }
+  
+      if( currentPage!=lastPage && nextPage!=lastPage && lastPage != 0){
+          const button3 = document.createElement('button');
+          button3.innerHTML = lastPage ;
+          button3.addEventListener('click' , ()=>getLoadExpenses(lastPage , itemsPerPage))
+          pagination.appendChild(button3)
+      }
+  }
+
+  perpage.addEventListener('submit' , (e)=>{
+    e.preventDefault();
+    console.log(typeof(+e.target.itemsPerPage.value));
+    localStorage.setItem('itemsperpage' , +e.target.itemsPerPage.value )
+    itemsPerPage = localStorage.getItem('itemsperpage')
+    getLoadExpenses(1 , +e.target.itemsPerPage.value);
+})

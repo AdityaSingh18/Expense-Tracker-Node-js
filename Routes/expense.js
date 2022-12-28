@@ -5,7 +5,7 @@ const userAuthenticate = require('../middleware/auth')
 
 router.post('/addexpense',userAuthenticate.authentication,expenseController.addExpense)
 
-router.get('/expenses',userAuthenticate.authentication,expenseController.getExpenses)
+router.post('/:pageno',userAuthenticate.authentication,expenseController.getExpenses)
 
 router.delete('/delete/:userID',userAuthenticate.authentication,expenseController.deleteExpense)
 router.get('/download' , userAuthenticate.authentication ,expenseController.downloadExpense )

@@ -22,7 +22,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 
 app.use('/user',userRoutes)
-app.use(expenseRouter)
+app.use('/expenses',expenseRouter)
 app.use('/payment' , purchaseRouter)
 app.use('/premium',premiumFeatureRouter)
 app.use('/password',forgotpassRouter)

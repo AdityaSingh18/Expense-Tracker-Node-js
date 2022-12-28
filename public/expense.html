@@ -47,11 +47,18 @@
   
    <div id="message"></div>
     </ul>
+    <div id="pagination">123</div>
     <ul id="leaderboard"></ul>
+    
     
    </div>
    <button onclick="download()" id="downloadexpense">Download File</button>
   </div>
+
+  <form id="perpage" style="padding-top: 4rem;" >
+    Expenses Per Page : <input id="input" type="number" min="5" max="20"  name="itemsPerPage" >
+    <button id="perpagebutton" type="submit">submit</button>
+  </form>
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js"></script>
   <script src="./expense.js">
