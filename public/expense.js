@@ -52,7 +52,7 @@ window.addEventListener("DOMContentLoaded",()=>{
   let serilized_Obj = JSON.stringify(myobj);
   console.log(myobj)
   
-  axios.post("http://localhost:3000/expenses/addexpense",myobj,{headers:{"Authorization":token}})
+  axios.post("http://localhost:3000/expense/addexpense",myobj,{headers:{"Authorization":token}})
   .then((Response)=>{
   console.log(Response)
   document.getElementById('amount').value="";
@@ -200,7 +200,7 @@ window.addEventListener("DOMContentLoaded",()=>{
 
     function download(){
       const token = localStorage.getItem('token')
-      axios.get('http://localhost:3000/expenses/download',{headers : {'Authorization': token}})
+      axios.get('http://localhost:3000/expense/download',{headers : {'Authorization': token}})
       .then((response)=>{
         if(response.status===200){
           var a = document.createElement("a");
@@ -222,7 +222,7 @@ window.addEventListener("DOMContentLoaded",()=>{
     async function getLoadExpenses(page , itemsPerPage){
       const token = localStorage.getItem('token')
       try {
-          let response = await axios.post(`http://localhost:3000/expenses/${page}` ,{itemsPerPage:itemsPerPage}  , {headers:{"Authorization" : token}})
+          let response = await axios.post(`http://localhost:3000/expense/${page}` ,{itemsPerPage:itemsPerPage}  , {headers:{"Authorization" : token}})
           // console.log(response.data.info)
           let parentNode = document.getElementById('belowexpenses');
           parentNode.innerHTML=''

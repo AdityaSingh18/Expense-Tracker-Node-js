@@ -9,6 +9,7 @@ router.post('/:pageno',userAuthenticate.authentication,expenseController.getExpe
 
 router.delete('/delete/:userID',userAuthenticate.authentication,expenseController.deleteExpense)
 router.get('/download' , userAuthenticate.authentication ,expenseController.downloadExpense )
+router.get('/getAllDownloadUrl' , userAuthenticate.authentication ,expenseController.downloadAllUrl )
 
 
 module.exports=router;
